@@ -10,20 +10,13 @@ var rename = require('gulp-rename'),
 	watch = require('gulp-watch'),
 	autoprefixer = require('gulp-autoprefixer'),
 	csscomb = require('gulp-csscomb'),
-	plumber = require('gulp-plumber'),
 	replace = require('gulp-replace');
 
 //cenecテーマ
 //SCSSファイルをCSSにコンパイルする
 gulp.task('sass', function () {
 	gulp.src(['src/scss/**/*.scss'])
-		.pipe(plumber({
-			handleError: function (err) {
-				console.log(err);
-				this.emit('end');
-			}
-		}))
-		.pipe(sass())
+		.pipe(sass().on('error', sass.logError))
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions', 'ie 9'],
 			cascade: false
@@ -39,7 +32,7 @@ gulp.task('min', function () {
 		.pipe(rename({
 			suffix: '.min'
 		}))
-		.pipe(sass())
+		.pipe(sass().on('error', sass.logError))
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions', 'ie 9'],
 			cascade: false
